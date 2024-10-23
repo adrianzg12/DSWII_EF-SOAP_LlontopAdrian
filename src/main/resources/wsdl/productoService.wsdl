@@ -1,0 +1,77 @@
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:tns="http://www.cibertec.edu.pe/soap/producto"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                  name="ProductoService">
+
+    <wsdl:types>
+        <xsd:schema targetNamespace="http://www.cibertec.edu.pe/soap/producto">
+            <xsd:complexType name="Producto">
+                <xsd:sequence>
+                    <xsd:element name="id" type="xsd:long"/>
+                    <xsd:element name="nombre" type="xsd:string"/>
+                    <xsd:element name="descripcion" type="xsd:string"/>
+                    <xsd:element name="precio" type="xsd:decimal"/>
+                    <xsd:element name="disponibilidad" type="xsd:boolean"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:element name="producto" type="tns:Producto"/> <!-- Referencia correcta -->
+            <xsd:element name="id" type="xsd:long"/> <!-- Este puede quedar como está -->
+        </xsd:schema>
+    </wsdl:types>
+
+    <wsdl:message name="createProductoRequest">
+        <wsdl:part name="producto" element="tns:producto"/> <!-- Cambia a usar el tipo complejo -->
+    </wsdl:message>
+
+    <wsdl:message name="createProductoResponse">
+        <wsdl:part name="id" element="tns:id"/>
+    </wsdl:message>
+
+    <wsdl:message name="getProductoRequest">
+        <wsdl:part name="id" element="tns:id"/>
+    </wsdl:message>
+
+    <wsdl:message name="getProductoResponse">
+        <wsdl:part name="producto" element="tns:producto"/> <!-- Cambia a usar el tipo complejo -->
+    </wsdl:message>
+
+    <wsdl:portType name="ProductoPort">
+        <wsdl:operation name="createProducto">
+            <wsdl:input message="tns:createProductoRequest"/>
+            <wsdl:output message="tns:createProductoResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="getProducto">
+            <wsdl:input message="tns:getProductoRequest"/>
+            <wsdl:output message="tns:getProductoResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+
+    <wsdl:binding name="ProductoBinding" type="tns:ProductoPort">
+        <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="createProducto">
+            <soap:operation soapAction="createProducto"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getProducto">
+            <soap:operation soapAction="getProducto"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+
+    <wsdl:service name="ProductoService">
+        <wsdl:port name="ProductoPort" binding="tns:ProductoBinding">
+            <soap:address location="http://localhost:8080/ws"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>
